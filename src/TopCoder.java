@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class TopCoder {
     /*
@@ -16,16 +14,20 @@ public class TopCoder {
     public int PalindromeGame(String[] fronts, int[] backs) {
         if (fronts.length == 0 || fronts.length != backs.length) return 0;
         boolean[] used = new boolean[fronts.length];
-//        return RecursivePalindromeGame(fronts, backs, used);
-        return GreedyPalindromeGame(fronts, backs, used);
+
+        int ans = GreedyPalindromeGame(fronts, backs, used);
+//        int ans = RecursivePalindromeGame(fronts, backs, used);
+        return ans;
     }
 
-    // TODO convert this recursive procedure to Greedy/Iterative procedure
+    /*
+    Recursive version
+     */
     private int RecursivePalindromeGame(String[] fronts, int[] backs, boolean[] used) {
 
         int maxi = -1;
         int maxj = -1;
-        int m = -1;
+        int m = 0;
 
         // Greedy
         for (int i = 0; i < fronts.length; ++i) {
@@ -48,38 +50,54 @@ public class TopCoder {
         } else {
             m = 0;
             for (int i = 0; i < fronts.length; ++i) {
-                if (!used[i] && isPalindromeStrings(fronts[i], fronts[i]) && backs[i] > m)
+                if (!used[i] && isPalindromeStrings(fronts[i], fronts[i]) && backs[i] > m) {
                     m = backs[i];
+                }
             }
             return m;
         }
     }
 
+    /*
+    Iterative version
+     */
     private int GreedyPalindromeGame(String[] fronts, int[] backs, boolean[] used) {
         int maxi = -1;
         int maxj = -1;
+        int tmp = 0;
         int m = 0;
 
+        // Greedy
         for (int i = 0; i < fronts.length; ++i) {
             if (used[i]) continue;
+            tmp = 0;
             for (int j = 0; j < fronts.length; ++j) {
                 if (i == j || used[j]) continue;
-                if (isPalindromeStrings(fronts[i], fronts[j])) {
+                if (isPalindromeStrings(fronts[i], fronts[j]) && backs[i] + backs[j] > tmp) {
                     maxi = i;
                     maxj = j;
-                    m += backs[i] + backs[j];
-                    used[maxi] = true;
-                    used[maxj] = true;
+                    tmp = backs[i] + backs[j];
                 }
+            }
+            if (tmp > 0) {
+                m += tmp;
+                used[maxi] = true;
+                used[maxj] = true;
             }
         }
 
-        if (maxi == -1) {
-            m = 0;
-            for (int i = 0; i < fronts.length; ++i) {
-                if (!used[i] && isPalindromeStrings(fronts[i], fronts[i]) && backs[i] > m)
-                    m = backs[i];
+        // Greedy
+        tmp = 0;
+        maxi = -1;
+        for (int i = 0; i < fronts.length; ++i) {
+            if (!used[i] && isPalindromeStrings(fronts[i], fronts[i]) && backs[i] > tmp) {
+                tmp = backs[i];
+                maxi = i;
             }
+        }
+        if (tmp > 0) {
+            m += tmp;
+            used[maxi] = true;
         }
 
         return m;
@@ -146,4 +164,47 @@ public class TopCoder {
     5. Develop a recursive algorithm that implements the greedy strategy
     6. Convert the recursive algorithm to an iterative algorithm
      */
+
+    /*
+    LampGrid
+    Search
+
+    A row in the grid is considered lit if all the lamps in that row are 'on', Jack must make exactly K flips.
+    The K flips do not necessarily have to be performed on K distinct switches. his goal is to have as many lit rows
+    as possible after making those flips.
+
+    Given a String[] initial, where j-th character of the i-th element is '1' if the lamp i row i, column j is initially
+    'on' and '0' otherwise. Return the maximal number of rows that can be lit after performing exactly K flips.
+     */
+    public int LampsGrid(String[] initial, int K) {
+        int res = 0;
+        Set<String> mySet = new HashSet<>();
+        for (String s : initial) {
+            mySet.add(s);
+        }
+        for (String s : mySet) {
+            if (checkLampsGrid(s, K)) {
+                int count = 0;
+                for (String it : initial) {
+                    if (s.equals(it)) count++;
+                }
+                res = Math.max(res, count);
+            }
+        }
+        return res;
+    }
+
+    private boolean checkLampsGrid(String s, int k) {
+        int zeros = 0;
+        for (char c : s.toCharArray()) {
+            if (c == '0') zeros++;
+        }
+        if (k < zeros)
+            return false;
+        else if (k == zeros)
+            return true;
+        k -= zeros;
+        return k % 2 == 0;
+    }
+
 }
