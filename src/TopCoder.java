@@ -10,6 +10,16 @@ public class TopCoder {
     visible such that concatenated string is a palindrome. Fix maximum score
 
     Solution: use recursive method (Greedy algorithm/top-down) to build a boolean[] masks to find the maximum at each recursion
+
+    // PalindromeGame tests
+//        String fronts = "abc,abc,def,cba,fed";
+//        int[] backs = {24, 7, 63, 222, 190};
+//        String fronts = "aaaaaaaaaaaa,nopalindrome,steponnopets,emordnilapon,aaaaaaaaaaaa,steponnopets,nopalindrome,steponnopets,nopalindrome,bbbbbbbbbbbb,cannotbeused,cannotbeused,steponnopets,aaaaaaaaaaaa,nopalindrome,aaaaaaaaaaaa,nopalindrome,emordnilapon,steponnopets,nopalindrome";
+//        int[] backs = {4096, 131072, 64, 262144, 512, 1024, 65536, 2048, 32768, 1, 524288, 16384, 32, 4, 16, 2, 8, 128, 8192, 256};
+//        String fronts = "aabaa,defg";
+//        int[] backs = {99, 1};
+//        int ans = tc.PalindromeGame(fronts.split(","), backs);
+//        System.out.println("Max: " + ans);
      */
     public int PalindromeGame(String[] fronts, int[] backs) {
         if (fronts.length == 0 || fronts.length != backs.length) return 0;
@@ -118,6 +128,15 @@ public class TopCoder {
 
     Note: Add a fictitious activity with s(0) = 0 and f(0) = 0 to the original start/finish arrays so that the first
     sub-problem S(0) is the entire set.
+
+    // Activity Selector (Greedy Algorithm) tests
+//        int[] start_times = {1, 3, 0, 5, 3, 5, 6, 8, 8, 2, 12};
+//        int[] finish_times = {4, 5, 6, 7, 9, 9, 10, 11, 12, 14, 16};
+//        List<Integer> ans = tc.ActivitySelector(start_times, finish_times);
+//        for (Integer i : ans) {
+//            System.out.printf("%d ", i);
+//        }
+
      */
     public List<Integer> ActivitySelector(int[] start_times, int[] finish_times) {
         List<Integer> ans = new ArrayList<>();
@@ -175,6 +194,14 @@ public class TopCoder {
 
     Given a String[] initial, where j-th character of the i-th element is '1' if the lamp i row i, column j is initially
     'on' and '0' otherwise. Return the maximal number of rows that can be lit after performing exactly K flips.
+
+    // LampsGrid tests
+//        String[] initial = {"001", "101", "001", "000", "111", "001", "101", "111", "110", "000", "111", "010", "110", "001"};
+//        int ans = tc.LampsGrid(initial, 6);
+//        System.out.println(ans);
+//        String[] initial2 = {"01", "10", "01", "01", "10"};
+//        ans = tc.LampsGrid(initial2, 1);
+//        System.out.println(ans);
      */
     public int LampsGrid(String[] initial, int K) {
         int res = 0;

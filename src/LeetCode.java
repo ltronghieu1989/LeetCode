@@ -169,6 +169,186 @@ public class LeetCode {
         return ans;
     }
 
+    /*---------------------------------------------------------
+                            BINARY TREE
+     ---------------------------------------------------------*/
 
+    /*
+    Binary Tree Vertical Order Path
+     */
+    public void verticalOrderTraversal(TreeNode root) {
+        TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
+        List<Integer> a1 = new ArrayList<>();
+        int level = 0;  // '0' is the root vertical order
+        verticalRecursion(root, level, ht, a1);
+
+        Set<Integer> i = ht.keySet();
+        for (int keys : i) {
+            System.out.println(keys + " " + ht.get(keys));
+        }
+    }
+
+    // 1. Do inorder-traversal
+    // 2. Use a 'level' -- going left, ++ going right to separate out the level vertically
+    // 3. Store elements of each level, create a TreeMap and the key-value pair will be (level, [])
+    private TreeNode verticalRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
+        if (root == null) {
+            return null;
+        }
+
+        // Going left
+        TreeNode left = verticalRecursion(root.left, --level, ht, a1);
+
+        // No left node found
+        if (left == null) {
+            level++;
+        }
+
+        if (ht.get(level) != null) {
+            List<Integer> x = ht.get(level);
+            x.add(root.val);
+            ht.put(level, x);
+        } else {
+            a1 = new ArrayList<>();
+            a1.add(root.val);
+            ht.put(level, a1);
+        }
+
+        // Going right and return
+        return verticalRecursion(root.right, ++level, ht, a1);
+    }
+
+    /*
+    Binary Tree Top View
+    Approach: similar ot the vertical order traversal. Modify the code so that it will print only the first element
+    it will encounter in the vertical order
+     */
+    public void topView(TreeNode root) {
+        TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
+        List<Integer> a1 = new ArrayList<>();
+        int level = 0;  // '0' is the root vertical order
+        topViewRecursion(root, level, ht, a1);
+
+        Set<Integer> i = ht.keySet();
+        for (int keys : i) {
+            System.out.println(keys + " " + ht.get(keys));
+        }
+    }
+
+    private TreeNode topViewRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
+        if (root == null) return null;
+        TreeNode left = topViewRecursion(root.left, --level, ht, a1);
+
+        if (left == null) level++;
+
+        if (!ht.containsKey(level)) {
+            a1 = new ArrayList<>();
+            a1.add(root.val);
+            ht.put(level, a1);
+        }
+
+        return topViewRecursion(root.right, ++level, ht, a1);
+    }
+
+    /*
+    Binary Tree Bottom View
+     */
+    public void bottomView(TreeNode root) {
+        TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
+        List<Integer> a1 = new ArrayList<>();
+        int level = 0;  // '0' is the root vertical order
+        bottomViewRecursion(root, level, ht, a1);
+
+        Set<Integer> i = ht.keySet();
+        for (int keys : i) {
+            System.out.println(keys + " " + ht.get(keys));
+        }
+    }
+
+    private void bottomViewRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
+
+    }
+
+    /*
+    Binary Tree Right Side View
+     */
+    public void rightSideView(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        rightSideViewRecursion(root, list, 0);
+        for (Integer i : list) {
+            System.out.printf("%d ", i);
+        }
+    }
+
+    private void rightSideViewRecursion(TreeNode node, List<Integer> list, int currDepth) {
+        if (node == null) return;
+        if (currDepth == list.size()) {
+            list.add(node.val);
+        }
+        rightSideViewRecursion(node.right, list, currDepth + 1);
+        rightSideViewRecursion(node.left, list, currDepth + 1);
+    }
+
+    /*
+    Binary Tree Left Side View
+     */
+    public void leftSideView(TreeNode root) {
+        List<Integer> list = new ArrayList<>();
+        leftSideViewRecursion(root, list, 0);
+        for (Integer i : list) {
+            System.out.printf("%d ", i);
+        }
+    }
+
+    private void leftSideViewRecursion(TreeNode node, List<Integer> list, int currDepth) {
+        if (node == null) return;
+        if (currDepth == list.size()) {
+            list.add(node.val);
+        }
+        rightSideViewRecursion(node.left, list, currDepth + 1);
+        rightSideViewRecursion(node.right, list, currDepth + 1);
+    }
+
+
+    /*
+    Print Edge Nodes (Boundary) of a Binary Tree
+    http://articles.leetcode.com/print-edge-nodes-boundary-of-binary/
+    Given: {30,10,20,50,null,45,35} should return 30,10,50,45,35,20
+     */
+    public void printOuterEdges(TreeNode root) {
+
+    }
+
+
+    /*
+
+    Approach: Divide the tree into two subtrees. One if the left subtree and the other is the right subtree.
+    For left subtree, we print the leftmost edges from top to bottom, then we print its leaves from left to right
+    For right subtree, we print its leaves left to right, then its rightmost edges from bottom to top
+
+    Bad code didn't handle all cases
+
+    public void printOuterEdges(TreeNode root) {
+        if (root == null) return;
+        System.out.printf("%d ", root.val);
+        printLeftEdges(root.left, true);
+        printRightEdges(root.right, true);
+    }
+
+    private void printLeftEdges(TreeNode p, boolean print) {
+        if (p == null) return;
+        if (print || (p.left == null && p.right == null)) System.out.printf("%d ", p.val);
+        printLeftEdges(p.left, print);
+        printLeftEdges(p.right, (print && p.left == null) ? true : false);
+    }
+
+    private void printRightEdges(TreeNode p, boolean print) {
+        if (p == null) return;
+        printRightEdges(p.left, (print && p.right == null) ? true : false);
+        printRightEdges(p.right, print);
+        if (print || (p.left == null && p.right == null))
+            System.out.printf("%d ", p.val);
+    }
+    */
 }
 
