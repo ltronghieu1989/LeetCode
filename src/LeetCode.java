@@ -174,7 +174,75 @@ public class LeetCode {
      ---------------------------------------------------------*/
 
     /*
-    Binary Tree Vertical Order Path
+    Balanced Binary Tree
+     */
+
+    /*
+    Binary Tree Inorder Traversal (Iterative)
+     */
+
+    /*
+    Binary Tree Post-order Traversal (Iterative)
+     */
+
+    /*
+    Binary Tree Pre-order Traversal (Iterative);
+     */
+
+    /*
+    Binary Tree Level Order Traversal (top down)
+     */
+
+    /*
+    Binary Tree Level Order Traversal (bottom up)
+     */
+
+    /*
+    Binary Tree ZigZag Level Order Traversal
+     */
+
+    /*
+    Construct Binary Tree from Inorder and Post-order Traversal
+     */
+
+    /*
+    Construct Binary Tree from Inorder and Pre-order Traversal
+     */
+
+    /*
+    Find Leaves of Binary Tree
+     */
+
+    /*
+    Flatten Binary Tree to LinkedList
+     */
+
+    /*
+    Invert Binary Tree
+     */
+
+    /*
+    Lowest Command Ancestor of a Binary Tree
+     */
+
+    /*
+    Maximum Depth of Binary Tree
+     */
+
+    /*
+    Minimum Depth of Binary Tree
+     */
+
+    /*
+    Serialize and Deserialize Binary Tree
+     */
+
+    /*
+    Verify Pre-order Serialization of Binary Tree
+     */
+
+    /*
+    Binary Tree Vertical Order Traversal
      */
     public void verticalOrderTraversal(TreeNode root) {
         TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
@@ -237,8 +305,11 @@ public class LeetCode {
 
     private TreeNode topViewRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
         if (root == null) return null;
+
+        // Going left
         TreeNode left = topViewRecursion(root.left, --level, ht, a1);
 
+        // Not found
         if (left == null) level++;
 
         if (!ht.containsKey(level)) {
@@ -247,37 +318,63 @@ public class LeetCode {
             ht.put(level, a1);
         }
 
+        // Going right
         return topViewRecursion(root.right, ++level, ht, a1);
     }
 
     /*
     Binary Tree Bottom View
      */
-    public void bottomView(TreeNode root) {
+    public List<Integer> bottomView(TreeNode root) {
         TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
         List<Integer> a1 = new ArrayList<>();
         int level = 0;  // '0' is the root vertical order
         bottomViewRecursion(root, level, ht, a1);
 
         Set<Integer> i = ht.keySet();
+        a1 = new ArrayList<>();
         for (int keys : i) {
-            System.out.println(keys + " " + ht.get(keys));
+//            System.out.println(keys + " " + ht.get(keys));
+            a1.add(ht.get(keys).get(0));
         }
+
+        return a1;
     }
 
-    private void bottomViewRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
+    private TreeNode bottomViewRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
+        if (root == null) return null;
 
+        // Going left
+        TreeNode left = bottomViewRecursion(root.left, --level, ht, a1);
+
+        // Not found
+        if (left == null) level++;
+
+        if (ht.containsKey(level)) {
+            List<Integer> list = ht.get(level);
+            list.remove(0);
+            list.add(root.val);
+            ht.put(level, list);
+        } else {
+            a1 = new ArrayList<>();
+            a1.add(root.val);
+            ht.put(level, a1);
+        }
+
+        // Going right
+        return bottomViewRecursion(root.right, ++level, ht, a1);
     }
 
     /*
     Binary Tree Right Side View
      */
-    public void rightSideView(TreeNode root) {
+    public List<Integer> rightSideView(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         rightSideViewRecursion(root, list, 0);
-        for (Integer i : list) {
-            System.out.printf("%d ", i);
-        }
+//        for (Integer i : list) {
+//            System.out.printf("%d ", i);
+//        }
+        return list;
     }
 
     private void rightSideViewRecursion(TreeNode node, List<Integer> list, int currDepth) {
@@ -292,12 +389,13 @@ public class LeetCode {
     /*
     Binary Tree Left Side View
      */
-    public void leftSideView(TreeNode root) {
+    public List<Integer> leftSideView(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         leftSideViewRecursion(root, list, 0);
-        for (Integer i : list) {
-            System.out.printf("%d ", i);
-        }
+//        for (Integer i : list) {
+//            System.out.printf("%d ", i);
+//        }
+        return list;
     }
 
     private void leftSideViewRecursion(TreeNode node, List<Integer> list, int currDepth) {
@@ -316,9 +414,30 @@ public class LeetCode {
     Given: {30,10,20,50,null,45,35} should return 30,10,50,45,35,20
      */
     public void printOuterEdges(TreeNode root) {
+        if (root == null) return;
+
+        List<Integer> leftSide = new ArrayList<>();
+        leftSide = leftSideView(root);
+
+        List<Integer> rightSide = new ArrayList<>();
+        rightSide = rightSideView(root);
+
+        List<Integer> bottom = new ArrayList<>();
+        bottom = bottomView(root);
+
+        for (Integer i : leftSide) {
+            System.out.printf("%d ", i);
+        }
+        System.out.printf(" | ");
+        for (Integer i : bottom) {
+            System.out.printf("%d ", i);
+        }
+        System.out.printf(" | ");
+        for (Integer i : rightSide) {
+            System.out.printf("%d ", i);
+        }
 
     }
-
 
     /*
 
@@ -350,5 +469,13 @@ public class LeetCode {
             System.out.printf("%d ", p.val);
     }
     */
+
+    /*
+    Binary Tree Maximum Path Sum
+     */
+
+    /*
+    Binary Tree Paths
+     */
 }
 

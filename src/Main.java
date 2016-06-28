@@ -18,9 +18,12 @@ public class Main {
 //        System.out.println();
 //        lc.leftSideView(root);
 //        System.out.println();
-        lc.verticalOrderTraversal(root);
-        System.out.println();
-        lc.topView(root);
+//        lc.verticalOrderTraversal(root);
+//        System.out.println();
+//        lc.topView(root);
+//        System.out.println();
+//        lc.bottomView(root);
+        lc.printOuterEdges(root);
     }
 
     public static void preorderTraversal(TreeNode root) {
