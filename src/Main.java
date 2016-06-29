@@ -13,17 +13,9 @@ public class Main {
         root.right.left = new TreeNode(45);
         root.right.right = new TreeNode(35);
 
-        //lc.printOuterEdges(root);
-//        lc.rightSideView(root);
-//        System.out.println();
-//        lc.leftSideView(root);
-//        System.out.println();
-//        lc.verticalOrderTraversal(root);
-//        System.out.println();
-//        lc.topView(root);
-//        System.out.println();
-//        lc.bottomView(root);
-        lc.printOuterEdges(root);
+        for (Integer i : lc.printOuterEdges(root)) {
+            System.out.printf("%d ", i);
+        }
     }
 
     public static void preorderTraversal(TreeNode root) {

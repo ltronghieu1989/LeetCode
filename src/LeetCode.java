@@ -244,16 +244,19 @@ public class LeetCode {
     /*
     Binary Tree Vertical Order Traversal
      */
-    public void verticalOrderTraversal(TreeNode root) {
+    public List<Integer> verticalOrderTraversal(TreeNode root) {
         TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
         List<Integer> a1 = new ArrayList<>();
         int level = 0;  // '0' is the root vertical order
         verticalRecursion(root, level, ht, a1);
 
         Set<Integer> i = ht.keySet();
+        a1 = new ArrayList<>();
         for (int keys : i) {
-            System.out.println(keys + " " + ht.get(keys));
+            a1.add(ht.get(keys).get(0));
         }
+
+        return a1;
     }
 
     // 1. Do inorder-traversal
@@ -291,16 +294,19 @@ public class LeetCode {
     Approach: similar ot the vertical order traversal. Modify the code so that it will print only the first element
     it will encounter in the vertical order
      */
-    public void topView(TreeNode root) {
+    public List<Integer> topView(TreeNode root) {
         TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
         List<Integer> a1 = new ArrayList<>();
         int level = 0;  // '0' is the root vertical order
         topViewRecursion(root, level, ht, a1);
 
         Set<Integer> i = ht.keySet();
+        a1 = new ArrayList<>();
         for (int keys : i) {
-            System.out.println(keys + " " + ht.get(keys));
+            a1.add(ht.get(keys).get(0));
         }
+
+        return a1;
     }
 
     private TreeNode topViewRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
@@ -334,7 +340,6 @@ public class LeetCode {
         Set<Integer> i = ht.keySet();
         a1 = new ArrayList<>();
         for (int keys : i) {
-//            System.out.println(keys + " " + ht.get(keys));
             a1.add(ht.get(keys).get(0));
         }
 
@@ -371,9 +376,6 @@ public class LeetCode {
     public List<Integer> rightSideView(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         rightSideViewRecursion(root, list, 0);
-//        for (Integer i : list) {
-//            System.out.printf("%d ", i);
-//        }
         return list;
     }
 
@@ -392,9 +394,6 @@ public class LeetCode {
     public List<Integer> leftSideView(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         leftSideViewRecursion(root, list, 0);
-//        for (Integer i : list) {
-//            System.out.printf("%d ", i);
-//        }
         return list;
     }
 
@@ -413,34 +412,35 @@ public class LeetCode {
     http://articles.leetcode.com/print-edge-nodes-boundary-of-binary/
     Given: {30,10,20,50,null,45,35} should return 30,10,50,45,35,20
      */
-    public void printOuterEdges(TreeNode root) {
-        if (root == null) return;
+    public List<Integer> printOuterEdges(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        if (root == null) return ans;
 
         List<Integer> leftSide = new ArrayList<>();
         leftSide = leftSideView(root);
-
-        List<Integer> rightSide = new ArrayList<>();
-        rightSide = rightSideView(root);
-        rightSide.remove(0);
+        ListIterator li = leftSide.listIterator();
+        while (li.hasNext()) {
+            ans.add((Integer) li.next());
+        }
 
         List<Integer> bottom = new ArrayList<>();
         bottom = bottomView(root);
         bottom.remove(0);
-        bottom.remove(bottom.size()-1);
-
-        ListIterator li = leftSide.listIterator();
-        while (li.hasNext()) {
-            System.out.printf("%d ", li.next());
-        }
+        bottom.remove(bottom.size() - 1);
         li = bottom.listIterator();
         while (li.hasNext()) {
-            System.out.printf("%d ", li.next());
-        }
-        li = rightSide.listIterator(rightSide.size());
-        while (li.hasPrevious()) {
-            System.out.printf("%d ", li.previous());
+            ans.add((Integer) li.next());
         }
 
+        List<Integer> rightSide = new ArrayList<>();
+        rightSide = rightSideView(root);
+        rightSide.remove(0);
+        li = rightSide.listIterator(rightSide.size());
+        while (li.hasPrevious()) {
+            ans.add((Integer) li.previous());
+        }
+
+        return ans;
     }
 
     /*
