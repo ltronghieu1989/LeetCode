@@ -177,6 +177,7 @@ public class LeetCode {
     Balanced Binary Tree
      */
 
+
     /*
     Binary Tree Inorder Traversal (Iterative)
      */
@@ -475,11 +476,16 @@ public class LeetCode {
     */
 
     /*
-    Binary Tree Maximum Path Sum
+    89. Gray Code
+    Math problem: G(i) = i ^ (i/2)
      */
+    public List<Integer> grayCode(int n) {
+        List<Integer> ans = new ArrayList<>();
+        for (int i = 0; i < (1 << n); i++) {
+            ans.add(i ^ i >> 1);
+        }
+        return ans;
+    }
 
-    /*
-    Binary Tree Paths
-     */
 }
 

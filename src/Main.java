@@ -6,16 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TreeNode root = new TreeNode(30);
-        root.left = new TreeNode(10);
-        root.right = new TreeNode(20);
-        root.left.left = new TreeNode(50);
-        root.right.left = new TreeNode(45);
-        root.right.right = new TreeNode(35);
-
-        for (Integer i : lc.printOuterEdges(root)) {
-            System.out.printf("%d ", i);
-        }
+        System.out.println(1 << 4);
     }
 
     public static void preorderTraversal(TreeNode root) {
