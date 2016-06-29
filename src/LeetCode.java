@@ -421,20 +421,24 @@ public class LeetCode {
 
         List<Integer> rightSide = new ArrayList<>();
         rightSide = rightSideView(root);
+        rightSide.remove(0);
 
         List<Integer> bottom = new ArrayList<>();
         bottom = bottomView(root);
+        bottom.remove(0);
+        bottom.remove(bottom.size()-1);
 
-        for (Integer i : leftSide) {
-            System.out.printf("%d ", i);
+        ListIterator li = leftSide.listIterator();
+        while (li.hasNext()) {
+            System.out.printf("%d ", li.next());
         }
-        System.out.printf(" | ");
-        for (Integer i : bottom) {
-            System.out.printf("%d ", i);
+        li = bottom.listIterator();
+        while (li.hasNext()) {
+            System.out.printf("%d ", li.next());
         }
-        System.out.printf(" | ");
-        for (Integer i : rightSide) {
-            System.out.printf("%d ", i);
+        li = rightSide.listIterator(rightSide.size());
+        while (li.hasPrevious()) {
+            System.out.printf("%d ", li.previous());
         }
 
     }
