@@ -41,14 +41,9 @@ public class Main {
     }
 
     public static void main (String[] args) {
-
-        List<Integer> ans = lc.grayCode(4);
-        for (Integer i : ans) {
-            System.out.printf("%d\t\t", (i));
-        }
-        System.out.println();
-        for (Integer i : ans) {
-            System.out.printf("%s\t", DecToBinary(i));
+        List<List<Integer>> ans = lc.combine(4,3);
+        for (List<Integer> list : ans) {
+            System.out.println(list);
         }
     }
 }

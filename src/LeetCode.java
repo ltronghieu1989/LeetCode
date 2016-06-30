@@ -6,7 +6,7 @@ class TreeNode {
     TreeNode left;
     TreeNode right;
 
-    public TreeNode (int val) {
+    public TreeNode(int val) {
         this.val = val;
         this.left = null;
         this.right = null;
@@ -20,7 +20,7 @@ class TreeNode {
  */
 class Codec {
     // Encodes a tree to a single string
-    public String serialize (TreeNode root) {
+    public String serialize(TreeNode root) {
         StringBuilder sb = new StringBuilder();
         if (root == null) return "null";
 
@@ -33,7 +33,7 @@ class Codec {
         return sb.toString();
     }
 
-    private void serializeBinaryTreeRecursion (TreeNode root, StringBuilder sb) {
+    private void serializeBinaryTreeRecursion(TreeNode root, StringBuilder sb) {
         if (root == null) {
             sb.append("null").append(",");
         } else {
@@ -43,7 +43,7 @@ class Codec {
         }
     }
 
-    private void serializeBinaryTreeIteration (TreeNode root, StringBuilder sb) {
+    private void serializeBinaryTreeIteration(TreeNode root, StringBuilder sb) {
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
         sb.append(root.val).append(",");
@@ -68,7 +68,7 @@ class Codec {
     }
 
     // Decode your encoded data to tree
-    public TreeNode deserialize (String data) {
+    public TreeNode deserialize(String data) {
         TreeNode root = null;
         if (data == null) return root;
 
@@ -83,7 +83,7 @@ class Codec {
         return root;
     }
 
-    private TreeNode deserializeBinaryTreeRecursion (Queue<String> nodes) {
+    private TreeNode deserializeBinaryTreeRecursion(Queue<String> nodes) {
         String val = nodes.poll();
         if (val.equals("null")) {
             return null;
@@ -95,7 +95,7 @@ class Codec {
         }
     }
 
-    private TreeNode deserializeBinaryTreeIteration (String data) {
+    private TreeNode deserializeBinaryTreeIteration(String data) {
         TreeNode root = null;
         String[] nodes = data.split(",");
         if (!nodes[0].equals("null"))
@@ -128,7 +128,7 @@ public class LeetCode {
     /*
     Find least occurrence in a given string
      */
-    public char firstLeastOccurence (String s) {
+    public char firstLeastOccurence(String s) {
         char ans = ' ';
         if (s == null || s.length() == 0) return ans;
 
@@ -245,7 +245,7 @@ public class LeetCode {
     /*
     Binary Tree Vertical Order Traversal
      */
-    public List<Integer> verticalOrderTraversal (TreeNode root) {
+    public List<Integer> verticalOrderTraversal(TreeNode root) {
         TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
         List<Integer> a1 = new ArrayList<>();
         int level = 0;  // '0' is the root vertical order
@@ -263,7 +263,7 @@ public class LeetCode {
     // 1. Do inorder-traversal
     // 2. Use a 'level' -- going left, ++ going right to separate out the level vertically
     // 3. Store elements of each level, create a TreeMap and the key-value pair will be (level, [])
-    private TreeNode verticalRecursion (TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
+    private TreeNode verticalRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
         if (root == null) {
             return null;
         }
@@ -295,7 +295,7 @@ public class LeetCode {
     Approach: similar ot the vertical order traversal. Modify the code so that it will print only the first element
     it will encounter in the vertical order
      */
-    public List<Integer> topView (TreeNode root) {
+    public List<Integer> topView(TreeNode root) {
         TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
         List<Integer> a1 = new ArrayList<>();
         int level = 0;  // '0' is the root vertical order
@@ -310,7 +310,7 @@ public class LeetCode {
         return a1;
     }
 
-    private TreeNode topViewRecursion (TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
+    private TreeNode topViewRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
         if (root == null) return null;
 
         // Going left
@@ -332,7 +332,7 @@ public class LeetCode {
     /*
     Binary Tree Bottom View
      */
-    public List<Integer> bottomView (TreeNode root) {
+    public List<Integer> bottomView(TreeNode root) {
         TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
         List<Integer> a1 = new ArrayList<>();
         int level = 0;  // '0' is the root vertical order
@@ -347,7 +347,7 @@ public class LeetCode {
         return a1;
     }
 
-    private TreeNode bottomViewRecursion (TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
+    private TreeNode bottomViewRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
         if (root == null) return null;
 
         // Going left
@@ -374,13 +374,13 @@ public class LeetCode {
     /*
     Binary Tree Right Side View
      */
-    public List<Integer> rightSideView (TreeNode root) {
+    public List<Integer> rightSideView(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         rightSideViewRecursion(root, list, 0);
         return list;
     }
 
-    private void rightSideViewRecursion (TreeNode node, List<Integer> list, int currDepth) {
+    private void rightSideViewRecursion(TreeNode node, List<Integer> list, int currDepth) {
         if (node == null) return;
         if (currDepth == list.size()) {
             list.add(node.val);
@@ -392,13 +392,13 @@ public class LeetCode {
     /*
     Binary Tree Left Side View
      */
-    public List<Integer> leftSideView (TreeNode root) {
+    public List<Integer> leftSideView(TreeNode root) {
         List<Integer> list = new ArrayList<>();
         leftSideViewRecursion(root, list, 0);
         return list;
     }
 
-    private void leftSideViewRecursion (TreeNode node, List<Integer> list, int currDepth) {
+    private void leftSideViewRecursion(TreeNode node, List<Integer> list, int currDepth) {
         if (node == null) return;
         if (currDepth == list.size()) {
             list.add(node.val);
@@ -413,7 +413,7 @@ public class LeetCode {
     http://articles.leetcode.com/print-edge-nodes-boundary-of-binary/
     Given: {30,10,20,50,null,45,35} should return 30,10,50,45,35,20
      */
-    public List<Integer> printOuterEdges (TreeNode root) {
+    public List<Integer> printOuterEdges(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
         if (root == null) return ans;
 
@@ -479,7 +479,7 @@ public class LeetCode {
     89. Gray Code
     Math problem: G(i) = i ^ (i/2)
      */
-    public List<Integer> grayCode (int n) {
+    public List<Integer> grayCode(int n) {
         List<Integer> ans = new ArrayList<>();
         int combinations = 1 << n;
         for (int i = 0; i < combinations; i++) {
@@ -502,24 +502,43 @@ public class LeetCode {
     }
     Math problem: C(n,k) = C(n-1,k-1) + C(n-1,k)
      */
-    public List<List<Integer>> combine (int n, int k) {
-        if (k == n || k == 0) {
-            List<Integer> row = new ArrayList<>();
-            for (int i = 1; i <= k; i++) {
-                row.add(i);
-            }
-            return new LinkedList<>(Arrays.asList(row));
+
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> ans = new ArrayList<>();
+
+        if (k > n || k < 0) return ans;
+
+        if (k == 0) {
+            ans.add(new ArrayList<>());
+            return ans;
         }
-        List<List<Integer>> ans = combine(n - 1, k - 1);
-        ans.forEach(e -> e.add(n));
+
+        ans = combine(n - 1, k - 1);
+        for (List<Integer> list : ans) {
+            list.add(n);
+        }
+
         ans.addAll(combine(n - 1, k));
+
         return ans;
     }
 
-    public List<List<Integer>> combine2 (int n, int k) {
+    public List<List<Integer>> combine2(int n, int k) {
         List<List<Integer>> ans = new ArrayList<>();
-        // TODO
+        combine2Recursion(ans, new ArrayList<>(), 1, n, k);
         return ans;
+    }
+
+    private void combine2Recursion(List<List<Integer>> ans, List<Integer> list, int start, int n, int k) {
+        if (k == 0) {
+            ans.add(new ArrayList<>(list));
+        } else {
+            for (int i = start; i <= n; i++) {
+                list.add(i);
+                combine2Recursion(ans, list, i + 1, n, k - 1);
+                list.remove(list.size() - 1);
+            }
+        }
     }
 
 }
