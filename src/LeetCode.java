@@ -176,19 +176,84 @@ public class LeetCode {
     /*
     Balanced Binary Tree
      */
+    public boolean isBalanced(TreeNode root) {
+        return isBalancedDFSHeight(root) != -1;
+    }
 
+    private int isBalancedDFSHeight(TreeNode node) {
+        if (node == null) return 0;
+        int left, right;
+
+        if ((left = isBalancedDFSHeight(node.left)) == -1
+                || (right = isBalancedDFSHeight(node.right)) == -1
+                || Math.abs(left - right) > 1) {
+            return -1;
+        }
+
+        return Math.max(left, right) + 1;
+    }
 
     /*
-    Binary Tree Inorder Traversal (Iterative)
+    94. Binary Tree Inorder Traversal (Iterative)
+
+    Approach: use a stack to store visited nodes. Going to the most left. If left is null, pop a node, add the node
+    value and going to the right one node.
      */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode current = root;
+
+        while (true) {
+            if (current != null) {
+                stack.push(current);
+                current = current.left;
+            } else if (!stack.isEmpty()) {
+                current = stack.pop();
+                ans.add(current.val);
+                current = current.right;
+            } else {
+                break;
+            }
+
+        }
+
+        return ans;
+    }
 
     /*
     Binary Tree Post-order Traversal (Iterative)
      */
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        // TODO
+
+        return ans;
+    }
 
     /*
     Binary Tree Pre-order Traversal (Iterative);
      */
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        Stack<TreeNode> stack = new Stack<>();
+        stack.push(root);
+
+        while (!stack.isEmpty()) {
+            TreeNode node = stack.pop();
+            ans.add(node.val);
+            if (node.right != null) stack.push(node.right);
+            if (node.left != null) stack.push(node.left);
+        }
+
+        return ans;
+    }
 
     /*
     Binary Tree Level Order Traversal (top down)
@@ -240,6 +305,14 @@ public class LeetCode {
 
     /*
     Verify Pre-order Serialization of Binary Tree
+     */
+
+    /*
+    Graph Valid Tree
+     */
+
+    /*
+    Reconstruct Itinerary
      */
 
     /*
@@ -476,6 +549,54 @@ public class LeetCode {
     */
 
     /*
+    Binary Search Tree Iterator
+     */
+
+    /*
+    Closest Binary Search Tree Value I
+     */
+
+    /*
+    Closest Binary Search Tree Value II
+     */
+
+    /*
+    Inorder Successor in BST
+     */
+
+    /*
+    Convert Sorted Array to Binary Search Tree
+     */
+
+    /*
+    Convert Sorted Linked List to Binary Search Tree
+     */
+
+    /*
+    Lowest Common Ancestor of a Binary Search Tree
+     */
+
+    /*
+    Recover Binary Search Tree
+     */
+
+    /*
+    Unique Binary Search Trees
+     */
+
+    /*
+    Unique Binary Search Trees II
+     */
+
+    /*
+    Validate Binary Search Tree
+     */
+
+    /*
+    Verify Pre-order Sequence in Binary Search Tree
+     */
+
+    /*
     89. Gray Code
     Math problem: G(i) = i ^ (i/2)
      */
@@ -568,7 +689,7 @@ public class LeetCode {
             ans.add(new ArrayList<>(list));
         } else {
             for (int i = start; i < candidates.length && target >= candidates[i]; i++) {
-                if (i != start && candidates[i] == candidates[i-1]) continue;   // Skip
+                if (i != start && candidates[i] == candidates[i - 1]) continue;   // Skip
                 int curVal = target - candidates[i];
                 list.add(candidates[i]);
                 combinationSum2Recursion(candidates, curVal, ans, list, i + 1);
@@ -579,9 +700,33 @@ public class LeetCode {
 
     /*
     418. Combination Sum III
+    Find all possible combination of k numbers that add up to a number n, given that only numbers from 1  to 9 can be
+    used and each combination should be a unique set of numbers
+    Given k = 3, n = 7
+
+    Approach: Use an internal 'candidates' array 1-9, n is the 'target' and k is an additional condition
      */
     public List<List<Integer>> combinationSum3(int k, int n) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (k == 0 || n == 0) return ans;
 
+        int[] candidates = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        combinationSum3Recursion(k, n, candidates, ans, new ArrayList<>(), 0);
+        return ans;
+    }
+
+    private void combinationSum3Recursion(int k, int target, int[] candidates, List<List<Integer>> ans,
+                                          List<Integer> list, int start) {
+        if (k == 0 && target == 0) {
+            ans.add(new ArrayList<>(list));
+        } else {
+            for (int i = start; i < candidates.length && k > 0; i++) {
+                if (i != start && candidates[i] == candidates[i - 1]) continue;
+                list.add(candidates[i]);
+                combinationSum3Recursion(k - 1, target - candidates[i], candidates, ans, list, i + 1);
+                list.remove(list.size() - 1);
+            }
+        }
     }
 
 }

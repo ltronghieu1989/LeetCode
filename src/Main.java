@@ -41,10 +41,16 @@ public class Main {
     }
 
     public static void main (String[] args) {
-        int[] candidates = {10,1,2,7,6,1,5};
-        List<List<Integer>> ans = lc.combinationSum2(candidates, 8);
-        for (List<Integer> list : ans) {
-            System.out.println(list);
+        TreeNode root = new TreeNode(10);
+        root.left = new TreeNode(6);
+        root.right = new TreeNode(15);
+        root.left.right = new TreeNode(9);
+        root.right.left = new TreeNode(12);
+        root.right.right = new TreeNode(99);
+
+        List<Integer> inorder = lc.preorderTraversal(root);
+        for(Integer i : inorder) {
+            System.out.printf("%d ", i);
         }
     }
 }
