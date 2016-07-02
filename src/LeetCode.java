@@ -523,23 +523,35 @@ public class LeetCode {
         return ans;
     }
 
-    public List<List<Integer>> combine2(int n, int k) {
+    /*
+    Combination Sum
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> ans = new ArrayList<>();
-        combine2Recursion(ans, new ArrayList<>(), 1, n, k);
+        if (candidates.length == 0 || candidates == null) return ans;
+        Arrays.sort(candidates);
+
         return ans;
     }
 
-    private void combine2Recursion(List<List<Integer>> ans, List<Integer> list, int start, int n, int k) {
-        if (k == 0) {
-            ans.add(new ArrayList<>(list));
+    private void combinationSumRecursion(int[] candidates, int target, List<List<Integer>> ans,
+                                         List<Integer> combinationList, int startPos) {
+        if (target == 0) {
+            ans.add(combinationList);
         } else {
-            for (int i = start; i <= n; i++) {
-                list.add(i);
-                combine2Recursion(ans, list, i + 1, n, k - 1);
-                list.remove(list.size() - 1);
+            for (int i = startPos; i < candidates.length && target >= candidates[i]; i++) {
+                int curVal
             }
         }
     }
+
+    /*
+    Combination Sum II
+     */
+
+    /*
+    Combination Sum III
+     */
 
 }
 
