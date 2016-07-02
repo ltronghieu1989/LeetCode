@@ -524,34 +524,65 @@ public class LeetCode {
     }
 
     /*
-    Combination Sum
+    39. Combination Sum
      */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> ans = new ArrayList<>();
         if (candidates.length == 0 || candidates == null) return ans;
         Arrays.sort(candidates);
-
+        combinationSumRecursion(candidates, target, ans, new ArrayList<>(), 0);
         return ans;
     }
 
     private void combinationSumRecursion(int[] candidates, int target, List<List<Integer>> ans,
-                                         List<Integer> combinationList, int startPos) {
+                                         List<Integer> list, int startPos) {
         if (target == 0) {
-            ans.add(combinationList);
+            ans.add(new ArrayList<>(list));
         } else {
             for (int i = startPos; i < candidates.length && target >= candidates[i]; i++) {
-                int curVal
+                int curVal = target - candidates[i];
+                list.add(candidates[i]);
+                combinationSumRecursion(candidates, curVal, ans, list, i);
+                list.remove(list.size() - 1);
             }
         }
     }
 
     /*
-    Combination Sum II
+    40. Combination Sum II
+    Candidates can only be used once
      */
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (candidates == null && candidates.length == 0) return ans;
+
+        Arrays.sort(candidates);
+        combinationSum2Recursion(candidates, target, ans, new ArrayList<>(), 0);
+
+        return ans;
+    }
+
+    private void combinationSum2Recursion(int[] candidates, int target, List<List<Integer>> ans, List<Integer> list,
+                                          int start) {
+        if (target == 0) {
+            ans.add(new ArrayList<>(list));
+        } else {
+            for (int i = start; i < candidates.length && target >= candidates[i]; i++) {
+                if (i != start && candidates[i] == candidates[i-1]) continue;   // Skip
+                int curVal = target - candidates[i];
+                list.add(candidates[i]);
+                combinationSum2Recursion(candidates, curVal, ans, list, i + 1);
+                list.remove(list.size() - 1);
+            }
+        }
+    }
 
     /*
-    Combination Sum III
+    418. Combination Sum III
      */
+    public List<List<Integer>> combinationSum3(int k, int n) {
+
+    }
 
 }
 

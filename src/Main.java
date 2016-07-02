@@ -41,7 +41,8 @@ public class Main {
     }
 
     public static void main (String[] args) {
-        List<List<Integer>> ans = lc.combine(4,3);
+        int[] candidates = {10,1,2,7,6,1,5};
+        List<List<Integer>> ans = lc.combinationSum2(candidates, 8);
         for (List<Integer> list : ans) {
             System.out.println(list);
         }
