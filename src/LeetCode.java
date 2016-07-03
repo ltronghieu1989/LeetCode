@@ -367,11 +367,16 @@ public class LeetCode {
     private int pPost;
 
     public TreeNode buildTreeInPost(int[] inorder, int[] postorder) {
-        TreeNode root = null;
-        pIn = inorder.length - 1;
-        pPost = postorder.length - 1;
-        root = buildTreeInPostRecursion(inorder, postorder, null);
-        return root;
+//        pIn = inorder.length - 1;
+//        pPost = postorder.length - 1;
+//        return buildTreeInPostRecursion(inorder, postorder, null);
+
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+        return buildTreeInPostRecursion2(inorder, 0, inorder.length - 1,
+                postorder, 0, postorder.length - 1, map);
     }
 
     private TreeNode buildTreeInPostRecursion(int[] inorder, int[] postorder, TreeNode end) {
@@ -381,26 +386,80 @@ public class LeetCode {
         TreeNode node = new TreeNode(postorder[pPost--]);
 
         // Create right subtree
-        if (inorder[pIn] != node.val) {
+        if (node.val != inorder[pIn]) {
             node.right = buildTreeInPostRecursion(inorder, postorder, node);
         }
         pIn--;
 
         // Create left subtree
-        if ((end == null) || inorder[pIn] != end.val) {
+        if (end == null || end.val != inorder[pIn]) {
             node.left = buildTreeInPostRecursion(inorder, postorder, end);
         }
 
         return node;
     }
 
+    private TreeNode buildTreeInPostRecursion2(int[] inorder, int inStart, int inEnd,
+                                               int[] postorder, int postStart, int postEnd,
+                                               Map<Integer, Integer> inorderMap) {
+        if (inStart > inEnd || postStart > postEnd) return null;
+
+        TreeNode node = new TreeNode(postorder[postEnd]);
+        int mid = inorderMap.get(postorder[postEnd]);
+        node.left = buildTreeInPostRecursion2(inorder, inStart, mid - 1,
+                postorder, postStart, postEnd - (inEnd - mid) - 1,
+                inorderMap);
+        node.right = buildTreeInPostRecursion2(inorder, mid + 1, inEnd,
+                postorder, postEnd - (inEnd - mid), postEnd - 1, inorderMap);
+        return node;
+    }
+
     /*
     Construct Binary Tree from Inorder and Pre-order Traversal
      */
+    public TreeNode buildTreeInPre(int[] preorder, int[] inorder) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            map.put(inorder[i], i);
+        }
+        return buildTreeInPreRecursion(inorder, 0, inorder.length - 1,
+                preorder, 0, preorder.length - 1, map);
+    }
+
+    private TreeNode buildTreeInPreRecursion(int[] inorder, int inStart, int inEnd,
+                                             int[] preorder, int preStart, int preEnd,
+                                             Map<Integer, Integer> inorderMap) {
+        if (preStart > preEnd || inStart > inEnd) return null;
+        TreeNode node = new TreeNode(preorder[preStart]);
+        int mid = inorderMap.get(preorder[preStart]);
+        node.left = buildTreeInPreRecursion(inorder, inStart, mid - 1,
+                preorder, preStart + 1, preEnd - (inEnd - mid), inorderMap);
+        node.right = buildTreeInPreRecursion(inorder, mid + 1, inEnd,
+                preorder, preEnd - (inEnd - mid) + 1,  preEnd, inorderMap);
+
+        return node;
+    }
 
     /*
-    Find Leaves of Binary Tree
+    366. Find Leaves of Binary Tree
+    Given a binary tree, find all leaves and then remove those leaves. Then repeat the previous steps until the
+    tree is empty.
      */
+    public List<List<Integer>> findLeavesBinaryTree(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        findLeavesRecursion(root, res);
+        return res;
+    }
+
+    private int findLeavesRecursion(TreeNode node, List<List<Integer>> res) {
+        if (node == null) return -1;
+        int level = 1 + Math.max(findLeavesRecursion(node.left, res), findLeavesRecursion(node.right, res));
+        if (res.size() < level + 1) {
+            res.add(new ArrayList<>());
+        }
+        res.get(level).add(node.val);
+        return level;
+    }
 
     /*
     Flatten Binary Tree to LinkedList
@@ -459,6 +518,7 @@ public class LeetCode {
     // 1. Do inorder-traversal
     // 2. Use a 'level' -- going left, ++ going right to separate out the level vertically
     // 3. Store elements of each level, create a TreeMap and the key-value pair will be (level, [])
+
     private TreeNode verticalRecursion(TreeNode root, int level, TreeMap<Integer, List<Integer>> ht, List<Integer> a1) {
         if (root == null) {
             return null;

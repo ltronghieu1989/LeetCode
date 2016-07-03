@@ -4,7 +4,7 @@ public class Main {
     private static LeetCode lc = new LeetCode();
     private static TopCoder tc = new TopCoder();
 
-    private static void preorderTraversal (TreeNode root) {
+    private static void preorderTraversal(TreeNode root) {
         if (root != null) {
             System.out.printf("%d ", root.val);
             preorderTraversal(root.left);
@@ -12,7 +12,7 @@ public class Main {
         }
     }
 
-    private static void postorderTraversal (TreeNode root) {
+    private static void postorderTraversal(TreeNode root) {
         if (root != null) {
             postorderTraversal(root.left);
             postorderTraversal(root.right);
@@ -20,7 +20,7 @@ public class Main {
         }
     }
 
-    private static void inorderTraversal (TreeNode root) {
+    private static void inorderTraversal(TreeNode root) {
         if (root != null) {
             inorderTraversal(root.left);
             System.out.printf("%d ", root.val);
@@ -28,7 +28,7 @@ public class Main {
         }
     }
 
-    private static String DecToBinary (int i) {
+    private static String DecToBinary(int i) {
         StringBuilder sb = new StringBuilder();
         while (i > 0) {
             sb.insert(0, (i & 1) == 1 ? "1" : "0");
@@ -40,11 +40,17 @@ public class Main {
         return sb.toString();
     }
 
-    public static void main (String[] args) {
-        int[] inorder = {9,3,15,10,};
-        int[] postorder = {9,15,10,3};
+    public static void main(String[] args) {
 
-        lc.buildTreeInPost(inorder, postorder);
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.left = new TreeNode(4);
+        root.left.right = new TreeNode(5);
 
+        List<List<Integer>> res = lc.findLeavesBinaryTree(root);
+        for (List<Integer> lis : res) {
+            System.out.println(lis);
+        }
     }
 }
