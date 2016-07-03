@@ -41,16 +41,10 @@ public class Main {
     }
 
     public static void main (String[] args) {
-        TreeNode root = new TreeNode(10);
-        root.left = new TreeNode(6);
-        root.right = new TreeNode(15);
-        root.left.right = new TreeNode(9);
-        root.right.left = new TreeNode(12);
-        root.right.right = new TreeNode(99);
+        int[] inorder = {9,3,15,10,};
+        int[] postorder = {9,15,10,3};
 
-        List<Integer> inorder = lc.preorderTraversal(root);
-        for(Integer i : inorder) {
-            System.out.printf("%d ", i);
-        }
+        lc.buildTreeInPost(inorder, postorder);
+
     }
 }

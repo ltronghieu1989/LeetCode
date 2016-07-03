@@ -224,19 +224,35 @@ public class LeetCode {
     }
 
     /*
-    Binary Tree Post-order Traversal (Iterative)
+    145. Binary Tree Post-order Traversal (Iterative)
      */
     public List<Integer> postorderTraversal(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
         if (root == null) return ans;
 
-        // TODO
+        Stack<TreeNode> stack = new Stack<>();
+        TreeNode current = root;
+        TreeNode last = null;
+
+        while (current != null || !stack.isEmpty()) {
+            if (current != null) {
+                stack.push(current);
+                current = current.left;
+            } else {
+                if (stack.peek().right != null && stack.peek().right != last) {
+                    current = stack.peek().right;
+                } else {
+                    last = stack.pop();
+                    ans.add(last.val);
+                }
+            }
+        }
 
         return ans;
     }
 
     /*
-    Binary Tree Pre-order Traversal (Iterative);
+    144. Binary Tree Pre-order Traversal (Iterative);
      */
     public List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> ans = new ArrayList<>();
@@ -256,20 +272,127 @@ public class LeetCode {
     }
 
     /*
-    Binary Tree Level Order Traversal (top down)
+    102. Binary Tree Level Order Traversal (top down)
+
+    Approach: use a queue to store nodes in one level
      */
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            int length = queue.size();
+            List<Integer> list = new ArrayList<>(length);
+            for (int i = 0; i < length; i++) {
+                TreeNode node = queue.poll();
+                if (node.right != null) queue.add(node.left);
+                if (node.left != null) queue.add(node.right);
+                list.add(node.val);
+            }
+            ans.add(list);
+        }
+
+        return ans;
+    }
 
     /*
-    Binary Tree Level Order Traversal (bottom up)
+    107. Binary Tree Level Order Traversal (bottom up)
+    Reverse the result of 'levelOrder'
      */
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            int length = queue.size();
+            List<Integer> list = new ArrayList<>(length);
+            for (int i = 0; i < length; i++) {
+                TreeNode node = queue.poll();
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+                list.add(node.val);
+            }
+            ans.add(0, list); // Instead of appending to the back, we insert at the start of the result list
+        }
+
+        return ans;
+    }
 
     /*
-    Binary Tree ZigZag Level Order Traversal
+    103. Binary Tree ZigZag Level Order Traversal
      */
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        List<List<Integer>> ans = new ArrayList<>();
+        if (root == null) return ans;
+
+        Deque<TreeNode> deque = new LinkedList<>();
+        deque.add(root);
+        boolean flag = false;
+
+        while (!deque.isEmpty()) {
+            int length = deque.size();
+            List<Integer> list = new ArrayList<>(length);
+            for (int i = 0; i < length; i++) {
+                TreeNode node = null;
+                if (!flag) {    // Left -> Right
+                    // Poll head and append to the back
+                    node = deque.pollFirst();
+                    if (node.left != null) deque.addLast(node.left);
+                    if (node.right != null) deque.addLast(node.right);
+                } else {        // Right -> Left
+                    // Poll tail and append to the front
+                    node = deque.pollLast();
+                    if (node.right != null) deque.addFirst(node.right);
+                    if (node.left != null) deque.addFirst(node.left);
+                }
+                list.add(node.val);
+            }
+            ans.add(list);
+            flag = !flag;
+        }
+
+        return ans;
+    }
 
     /*
     Construct Binary Tree from Inorder and Post-order Traversal
      */
+    private int pIn;
+    private int pPost;
+
+    public TreeNode buildTreeInPost(int[] inorder, int[] postorder) {
+        TreeNode root = null;
+        pIn = inorder.length - 1;
+        pPost = postorder.length - 1;
+        root = buildTreeInPostRecursion(inorder, postorder, null);
+        return root;
+    }
+
+    private TreeNode buildTreeInPostRecursion(int[] inorder, int[] postorder, TreeNode end) {
+        if (pPost < 0) return null;
+
+        // Create root node
+        TreeNode node = new TreeNode(postorder[pPost--]);
+
+        // Create right subtree
+        if (inorder[pIn] != node.val) {
+            node.right = buildTreeInPostRecursion(inorder, postorder, node);
+        }
+        pIn--;
+
+        // Create left subtree
+        if ((end == null) || inorder[pIn] != end.val) {
+            node.left = buildTreeInPostRecursion(inorder, postorder, end);
+        }
+
+        return node;
+    }
 
     /*
     Construct Binary Tree from Inorder and Pre-order Traversal
