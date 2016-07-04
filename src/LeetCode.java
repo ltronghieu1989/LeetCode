@@ -527,12 +527,44 @@ public class LeetCode {
     }
 
     /*
-    Maximum Depth of Binary Tree
+    104. Maximum Depth of Binary Tree
      */
+    public int maxDepth(TreeNode root) {
+
+        // Recursive DFS
+//        return (root == null) ? 0 : Math.max(maxDepth(root.left), maxDepth(root.right)) + 1;
+
+        // Iterative approach: similar to "Level Order Traversal"
+        if (root == null) return 0;
+
+        Deque<TreeNode> stack = new LinkedList<>();
+        stack.offer(root);
+        int level = 0;
+
+        while (!stack.isEmpty()) {
+            level++;
+            int length = stack.size();
+            for (int i = 0; i < length; i++) {
+                TreeNode top = stack.poll();
+                if (top.left != null) stack.offer(top.left);
+                if (top.right != null) stack.offer(top.right);
+            }
+        }
+        return level;
+    }
 
     /*
-    Minimum Depth of Binary Tree
+    111. Minimum Depth of Binary Tree
+    Breadth First Search
      */
+    public int minDepth(TreeNode root) {
+        if (root == null) return 0;
+
+        // Recursive BFS
+        int left = minDepth(root.left);
+        int right = minDepth(root.right);
+        return (left != 0 && right != 0) ? Math.min(left, right) + 1 : (left != 0) ? left + 1 : right + 1;
+    }
 
     /*
     Serialize and Deserialize Binary Tree
@@ -557,8 +589,11 @@ public class LeetCode {
         TreeMap<Integer, List<Integer>> ht = new TreeMap<>();
         List<Integer> a1 = new ArrayList<>();
         int level = 0;  // '0' is the root vertical order
+
+        // Start recursive method
         verticalRecursion(root, level, ht, a1);
 
+        // Return result
         Set<Integer> i = ht.keySet();
         a1 = new ArrayList<>();
         for (int keys : i) {

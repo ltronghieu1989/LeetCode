@@ -50,6 +50,6 @@ public class Main {
         root.right.right = new TreeNode(9);
         root.right.left = new TreeNode(6);
 
-        lc.invertTree(root);
+        System.out.println(lc.maxDepth(root));
     }
 }
