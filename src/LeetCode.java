@@ -503,7 +503,7 @@ public class LeetCode {
 
     /*
     226. Invert Binary Tree
-    Should be super easy. The approach is as simple as swapping two integers
+    The idea is easy. The approach is as simple as swapping two integers
      */
     public TreeNode invertTree(TreeNode node) {
         if (node != null) {
@@ -515,8 +515,16 @@ public class LeetCode {
     }
 
     /*
-    Lowest Command Ancestor of a Binary Tree
+    236. Lowest Command Ancestor of a Binary Tree
+    Approach: recursively going to left/right subtrees from root
+    If the current node equals to either left or right, return the current node as common ancestor
      */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+        if (root == null || root == p || root == q) return root;
+        TreeNode left = lowestCommonAncestor(root.left, p, q);
+        TreeNode right = lowestCommonAncestor(root.right, p, q);
+        return (left != null && right != null) ? root : (left != null) ? left : right;
+    }
 
     /*
     Maximum Depth of Binary Tree
