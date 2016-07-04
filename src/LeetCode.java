@@ -1,3 +1,5 @@
+import sun.reflect.generics.tree.Tree;
+
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -435,7 +437,7 @@ public class LeetCode {
         node.left = buildTreeInPreRecursion(inorder, inStart, mid - 1,
                 preorder, preStart + 1, preEnd - (inEnd - mid), inorderMap);
         node.right = buildTreeInPreRecursion(inorder, mid + 1, inEnd,
-                preorder, preEnd - (inEnd - mid) + 1,  preEnd, inorderMap);
+                preorder, preEnd - (inEnd - mid) + 1, preEnd, inorderMap);
 
         return node;
     }
@@ -454,7 +456,7 @@ public class LeetCode {
     private int findLeavesRecursion(TreeNode node, List<List<Integer>> res) {
         if (node == null) return -1;
         int level = 1 + Math.max(findLeavesRecursion(node.left, res), findLeavesRecursion(node.right, res));
-        if (res.size() < level + 1) {
+        if (level + 1 > res.size()) {
             res.add(new ArrayList<>());
         }
         res.get(level).add(node.val);
@@ -462,12 +464,55 @@ public class LeetCode {
     }
 
     /*
-    Flatten Binary Tree to LinkedList
+    114. Flatten Binary Tree to LinkedList
+    Approach: Similar to pre-order traversal
      */
 
+    public void flatten(TreeNode root) {
+        prev = null;
+        flattenRecursion(root);
+    }
+
+    private TreeNode prev = null;
+
+    // Recursion method: "reversed" pre-order traversal
+    private void flattenRecursion(TreeNode root) {
+        if (root != null) {
+            flattenRecursion(root.right);
+            flattenRecursion(root.left);
+            root.right = prev;
+            root.left = null;
+            prev = root;
+        }
+    }
+
+    // Iteration method
+    public void flatten2(TreeNode root) {
+        TreeNode current = root;
+        while (current != null) {
+            if (current.left != null) {
+                TreeNode left = current.left;
+                while (left.right != null) left = left.right;
+                left.right = current.right;
+                current.right = current.left;
+                current.left = null;
+            }
+            current = current.right;
+        }
+    }
+
     /*
-    Invert Binary Tree
+    226. Invert Binary Tree
+    Should be super easy. The approach is as simple as swapping two integers
      */
+    public TreeNode invertTree(TreeNode node) {
+        if (node != null) {
+            TreeNode tmp = invertTree(node.left);
+            node.left = invertTree(node.right);
+            node.right = tmp;
+        }
+        return node;
+    }
 
     /*
     Lowest Command Ancestor of a Binary Tree
