@@ -50,6 +50,10 @@ public class Main {
         root.right.right = new TreeNode(9);
         root.right.left = new TreeNode(6);
 
-        System.out.println(lc.maxDepth(root));
+        if (lc.isValidSerialization("9,3,4,#,#,1,#,#,2,#,6,#,#")) {
+            System.out.println("Yes");
+        } else {
+            System.out.println("No");
+        }
     }
 }

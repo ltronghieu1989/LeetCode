@@ -567,12 +567,21 @@ public class LeetCode {
     }
 
     /*
-    Serialize and Deserialize Binary Tree
+    331. Verify Pre-order Serialization of Binary Tree
+    Terminology:
+    in-degree of a node : 1
+    out-degree of a non-null node: 2
      */
-
-    /*
-    Verify Pre-order Serialization of Binary Tree
-     */
+    public boolean isValidSerialization(String preorder) {
+        if (preorder == null || preorder.length() == 0) return false;
+        String[] nodes = preorder.split(",");
+        int degree = -1;
+        for (String node : nodes) {
+            if (++degree > 0) return false;
+            if (!node.equals("#")) degree -= 2;
+        }
+        return degree == 0;
+    }
 
     /*
     Graph Valid Tree
