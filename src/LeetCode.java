@@ -926,6 +926,7 @@ public class LeetCode {
 
     /*
     39. Combination Sum
+    Approach: cannot apply 3Sum solution because we don't have a definite number of candidates
      */
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> ans = new ArrayList<>();
@@ -956,10 +957,8 @@ public class LeetCode {
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         List<List<Integer>> ans = new ArrayList<>();
         if (candidates == null && candidates.length == 0) return ans;
-
         Arrays.sort(candidates);
         combinationSum2Recursion(candidates, target, ans, new ArrayList<>(), 0);
-
         return ans;
     }
 
@@ -1009,5 +1008,20 @@ public class LeetCode {
         }
     }
 
+    /*
+    1. Two Sum
+     */
+
+    /*
+    15. Three Sum
+     */
+
+    /*
+    16. Three Sum Closest
+     */
+
+    /*
+    18. Four Sum
+     */
 }
 
