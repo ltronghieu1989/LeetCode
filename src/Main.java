@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
@@ -42,18 +43,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        TreeNode root = new TreeNode(4);
-        root.left = new TreeNode(2);
-        root.right = new TreeNode(7);
-        root.left.left = new TreeNode(1);
-        root.left.right = new TreeNode(3);
-        root.right.right = new TreeNode(9);
-        root.right.left = new TreeNode(6);
-
-        if (lc.isValidSerialization("9,3,4,#,#,1,#,#,2,#,6,#,#")) {
-            System.out.println("Yes");
-        } else {
-            System.out.println("No");
-        }
+        int[] nums1 = {2, 7, 13, 19};   //{1,2,4,7,8,13,14,16,19,26,28,32};
+        System.out.println(lc.nthSuperUglyNumber(5, nums1));
     }
 }

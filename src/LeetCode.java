@@ -1009,19 +1009,278 @@ public class LeetCode {
     }
 
     /*
-    1. Two Sum
+    1. Two Sum to zero
      */
+    public int[] twoSum(int[] nums, int target) {
+        if (nums == null || nums.length < 2) return new int[]{};
+        List<Integer> list = new ArrayList<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            map.put(nums[i], i);
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (map.containsKey(target - nums[i])) {
+                if (i < map.get(target - nums[i])) {
+                    list.add(i);
+                    list.add(map.get(target - nums[i]));
+                    break;
+                }
+                if (i > map.get(target - nums[i])) {
+                    list.add(map.get(target - nums[i]));
+                    list.add(i);
+                    break;
+                }
+            }
+        }
+        int[] ans = new int[list.size()];
+        for (int i = 0; i < ans.length; i++) {
+            ans[i] = list.get(i);
+        }
+        return ans;
+    }
 
     /*
-    15. Three Sum
+    15. Three Sum to zero
      */
+    public List<List<Integer>> threeSum(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (nums.length < 3) return res;
+        Arrays.sort(nums);
+
+        for (int i = 0; i < nums.length; i++) {
+            if (i > 0 && nums[i] == nums[i - 1]) continue;  // Skip duplicates
+            int target = 0 - nums[i];
+            int head = i + 1;
+            int tail = nums.length - 1;
+
+            // TODO
+            // Consider the two possible largest/smallest numbers to make an early exit
+
+            while (head < tail) {
+                if (nums[head] + nums[tail] == target) {
+                    res.add(Arrays.asList(nums[i], nums[head], nums[tail]));
+                    // Skip through duplicates
+                    while (head < tail && nums[head] == nums[head + 1]) head++;
+                    while (head < tail && nums[tail - 1] == nums[tail]) tail--;
+                    head++;
+                    tail--;
+                } else if (nums[head] + nums[tail] < target) {
+                    head++;
+                } else if (nums[head] + nums[tail] > target) {
+                    tail--;
+                }
+            }
+        }
+        return res;
+    }
 
     /*
     16. Three Sum Closest
+    Return the sum is closest to a given number
      */
+    public int threeSumClosest(int[] nums, int target) {
+        if (nums == null || nums.length < 3) return 0;
+        int res = 0;
+        int distance_from_target = Integer.MAX_VALUE;
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i > 0 && nums[i - 1] == nums[i]) continue;
+            int head = i + 1;
+            int tail = nums.length - 1;
+            while (head < tail) {
+                int sum = nums[i] + nums[head] + nums[tail];
+                if (sum != target) {
+                    int tmp = distance_from_target;
+                    distance_from_target = Math.min(distance_from_target, Math.abs(target - sum));
+                    if (distance_from_target != tmp)
+                        res = sum;
+                    if (sum > target) tail--;
+                    else if (sum < target) head++;
+                } else {
+                    return sum;
+                }
+            }
+        }
+        return res;
+    }
 
     /*
     18. Four Sum
+    Apply threeSum and twoSum solutions. Make early exit check to improve run-time complexity
+     */
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        if (nums == null || nums.length < 4) return res;
+        Arrays.sort(nums);
+        // Early check
+        if (4 * nums[0] > target || 4 * nums[nums.length - 1] < target) return res; // Too small
+        for (int i = 0; i < nums.length; i++) {
+            if (i > 0 && nums[i - 1] == nums[i]) continue;  // Skip duplicate
+            if (nums[i] + 3 * nums[nums.length - 1] < target) continue;  // Too small, skip
+            if (4 * nums[i] > target) break;    // Too big, early exit
+            if (4 * nums[i] == target) {    // Just right, early exit
+                if (i + 3 < nums.length && nums[i] == nums[i + 3]) {
+                    res.add(Arrays.asList(nums[i], nums[i + 1], nums[i + 2], nums[3]));
+                }
+                break;
+            }
+            // Otherwise, leverage the current pick to look for sub-sequence sum
+            threeSumHelper(nums, target - nums[i], i + 1, nums.length - 1, res, nums[i]);
+        }
+        return res;
+    }
+
+    private void threeSumHelper(int[] nums, int target, int lo, int hi, List<List<Integer>> res, int pick1) {
+        if (lo > hi || (hi - lo + 1) < 3) return;
+        // Early check
+        if (3 * nums[lo] > target || 3 * nums[hi] < target) return;  // Too small, early exit
+        for (int i = lo; i < hi - 1; i++) {
+            if (i > lo && nums[i - 1] == nums[i]) continue;
+            if (nums[i] + 2 * nums[hi] < target) continue;  // Too small, skip
+            if (3 * nums[i] > target) break;    // Too big, skip
+            if (3 * nums[i] == target) {
+                if (i + 1 < hi && nums[i] == nums[i + 2]) {
+                    res.add(Arrays.asList(pick1, nums[i], nums[i], nums[i]));
+                }
+                break;
+            }
+            // Otherwise, leverage the current pick to look for sub-sequence sum
+            twoSumHelper(nums, target - nums[i], i + 1, hi, res, pick1, nums[i]);
+        }
+    }
+
+    private void twoSumHelper(int[] nums, int target, int lo, int hi, List<List<Integer>> res, int pick1, int pick2) {
+        if (lo > hi || (hi - lo + 1) < 2) return;
+        // Early check
+        if (2 * nums[lo] > target || 2 * nums[hi] < target) return;
+        int i = lo;
+        int j = hi;
+        while (i < j) {
+            int sum = nums[i] + nums[j];
+            if (sum == target) {
+                res.add(Arrays.asList(pick1, pick2, nums[i], nums[j]));
+                while (i < j && nums[i] == nums[i - 1]) i++;
+                while (i < j && nums[j - 1] == nums[j]) j--;
+                i++;
+                j--;
+            } else if (sum < target) {
+                i++;
+            } else if (sum > target) {
+                j--;
+            }
+        }
+    }
+
+    /*
+    373. Find K Pairs with Smallest Sums
+    Given two integer arrays sorted in ascending order and an integer k
+    Define a pair (u,v) which consist of one element from the 1st array and one element from the 2nd array
+    1st array = {1,7,11}
+    2nd array = {2,4,6} with k = 3
+    All sequences: [1,2],[1,4],[1,6] [7,2],[7,4],[11,2] [7,6],[11,4],[11,6]
+    Returns: [1,2],[1,4],[1,6]
+
+    Test 1: {1,1,2} {1,2,3}
+
+    Approach: Use "PriorityQueue", "Find nth ugly number", "Merge K sorted arrays"
+     */
+    public List<int[]> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+        List<int[]> ans = new ArrayList<>();
+        if (nums1.length == 0 || nums2.length == 0 || k == 0) return ans;
+
+        int counter = 0;
+        int[] indexes = new int[nums1.length];
+        while (counter++ < k) {
+            int min_sum = Integer.MAX_VALUE;
+            int curr = -1;
+            for (int i = 0; i < nums1.length; i++) {
+                if (indexes[i] >= nums2.length) continue; // Out of bound in 2nd array
+                if (nums1[i] + nums2[indexes[i]] < min_sum) {
+                    min_sum = nums1[i] + nums2[indexes[i]];
+                    curr = i;
+                }
+            }
+            if (curr == -1) break;  // Early exit
+            ans.add(new int[]{nums1[curr], nums2[indexes[curr]]});
+            indexes[curr]++;
+        }
+        return ans;
+    }
+
+    /*
+    239. Sliding Window Maximum
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        //TODO
+        return new int[]{};
+    }
+
+    /*
+    263. Ugly Number
+     */
+    public boolean isUgly(int num) {
+        if (num == 0) return false;
+        while (num % 2 == 0) num /= 2;
+        while (num % 3 == 0) num /= 3;
+        while (num % 5 == 0) num /= 5;
+        return num == 1;
+    }
+
+    /*
+    264. Ugly Number 2
+     */
+    public int nthUglyNumber(int n) {
+        if (n < 1) return 0;
+        int idx2 = 0, idx3 = 0, idx5 = 0;
+        int factor2 = 1, factor3 = 1, factor5 = 1;
+        int[] ugly = new int[n];
+        int next = 1;
+        for (int i = 0; i < n; i++) {
+            ugly[i] = next;
+            next = Integer.MAX_VALUE;
+            if (factor2 == ugly[i]) factor2 = 2 * ugly[idx2++];
+            if (factor3 == ugly[i]) factor3 = 3 * ugly[idx3++];
+            if (factor5 == ugly[i]) factor5 = 5 * ugly[idx5++];
+            next = Math.min(factor2, Math.min(factor3, factor5));
+        }
+        return ugly[n - 1];
+    }
+
+    /*
+    313. Super Ugly Number
+    Expand Ugly Number 2 solution to array of indexes and array of factors
+     */
+    public int nthSuperUglyNumber(int n, int[] primes) {
+        if (n < 1 || primes.length == 0) return 0;
+        int[] index = new int[primes.length];
+        int[] factors = new int[primes.length];
+        Arrays.fill(factors, 1);
+        int[] ugly = new int[n];
+        int next = 1;
+        for (int i = 0; i < n; i++) {
+            ugly[i] = next;
+            next = Integer.MAX_VALUE;
+            for (int k = 0; k < primes.length; k++) {
+                if (factors[k] == ugly[i]) factors[k] = primes[k] * ugly[index[k]++];
+                next = Math.min(next, factors[k]);
+            }
+        }
+        return ugly[n - 1];
+    }
+
+    /*
+    279. Perfect Squares
+     */
+    public int numSquares(int n) {
+        //TODO
+        return -1;
+    }
+
+    /*
+    Merge K sorted arrays
      */
 }
 
+/*
+#0#3.\|4M!6~\/c
+ */
