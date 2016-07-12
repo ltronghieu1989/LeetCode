@@ -205,7 +205,7 @@ public class TopCoder {
      */
     public int LampsGrid(String[] initial, int K) {
         int res = 0;
-        Set<String> mySet = new HashSet<>();
+        Set<String> mySet = new HashSet<>();    // Use Hash-Set to eliminate duplicates
         for (String s : initial) {
             mySet.add(s);
         }
@@ -215,7 +215,7 @@ public class TopCoder {
                 for (String it : initial) {
                     if (s.equals(it)) count++;
                 }
-                res = Math.max(res, count);
+                res = Math.max(res, count); // Update maximum rows
             }
         }
         return res;

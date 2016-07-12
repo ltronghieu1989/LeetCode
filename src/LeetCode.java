@@ -733,6 +733,10 @@ public class LeetCode {
         return list;
     }
 
+    /*
+    Go down on the right branch first
+    Add the node value if it's the first node of the new level
+     */
     private void rightSideViewRecursion(TreeNode node, List<Integer> list, int currDepth) {
         if (node == null) return;
         if (currDepth == list.size()) {
@@ -1279,6 +1283,75 @@ public class LeetCode {
     /*
     Merge K sorted arrays
      */
+
+    /*
+    338. Counting Bits
+    Apply bit-wise comparison
+
+    For instance: num = 5
+    000 base case
+    001 from 000 (0)
+    010 from 000 (0)
+    011 from 010 (2)
+    100 from 000 (0)
+    101 from 100 (4)
+    Use bitwise operation i - (i & (-i)) to find previous index/value and increment 1
+     */
+    public int[] countBits(int num) {
+        int[] res = new int[num + 1];
+        for (int i = 1; i <= num; i++) {
+            int prevIdx = i - (i & (-i));
+            System.out.printf("current index = %d\tprevious index = %d\n", i, prevIdx);
+            res[i] = res[prevIdx] + 1;
+        }
+        return res;
+    }
+
+    /*
+    136. Single Number
+    Given an array of integers, every element appears twice except for one.
+     */
+    public int singleNumber(int[] nums) {
+        int res = 0;
+        for (int n : nums) {
+            res ^= n;
+        }
+        return res;
+    }
+
+    /*
+    137. Single Number 2
+    Given an array of integers, every element appears three times except for one.
+     */
+    public int singleNumber2(int[] nums) {
+        int mask1 = 0, mask2 = 0;
+        for (int i = 0; i < nums.length; i++) {
+            mask1 = (mask1 ^ nums[i] & ~mask2);
+            mask2 = (mask2 ^ nums[i] & ~mask1);
+        }
+        return mask1;
+    }
+
+    /*
+    260. Single Number 3
+    Given an array of integers, exactly two elements appear only once and all the other elements appear exactly twice
+     */
+    public int[] singleNumber3(int[] nums) {
+        int x_xor_y = 0;
+        for (int n : nums) {
+            x_xor_y ^= n;
+        }
+        int diff_mask = x_xor_y &~ (x_xor_y - 1);   // Find the last bit set different between x and y
+        int[] res = new int[2];
+        for (int n : nums) {
+            if ((n & diff_mask) != 0) {
+                res[0] ^= n;
+            } else {
+                res[1] ^= n;
+            }
+        }
+        return res;
+    }
 }
 
 /*

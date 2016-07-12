@@ -43,7 +43,10 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int[] nums1 = {2, 7, 13, 19};   //{1,2,4,7,8,13,14,16,19,26,28,32};
-        System.out.println(lc.nthSuperUglyNumber(5, nums1));
+        int[] nums = {1, 2, 1, 3, 2, 5};
+        int[] res = lc.singleNumber3(nums);
+        for (int n : res) {
+            System.out.println(n);
+        }
     }
 }
